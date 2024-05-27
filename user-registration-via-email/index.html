@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A simple user account registration case</title>
+  </head>
+
+  <style>
+    .invalid {
+      color: red;
+    }
+
+    .heler-message {
+      color: #666;
+      font-size: 13px;
+    }
+
+    .invalid-input {
+      border: 1px solid red;
+      color: red;
+    }
+
+    /* 选中 input[required] 相邻的后面一个label */
+    /* input[required] + label::after {
+      content: "*";
+      color: red;
+    } */
+
+    /* @FIXME: 不应该是前面吗? */
+    /* 
+        原来：
+        不好意思 CSS 从上面到下绘制的时候, 如果后面去设置前面的元素，可能会导致重排, 所以不支持前置或父级选择器
+        怎么办：
+        1. 用 JS 来处理？选中对应的元素，设置对应名称的label的样式，balabalabala一大堆逻辑？
+        2. 在 label 也加一个 自定义的 required 的属性(data-required)
+           然后用 CSS::after 来处理, 不对呀label和input的不联动(某些字段联动场景不支持)
+           还是得写JS, balabalabala又是一堆逻辑？
+    */
+
+    /* has写法: 官方觉得大家写得太难受了，(但是兼容性差) */
+    /* 兼容性列表：https://developer.mozilla.org/en-US/docs/Web/CSS/:has */
+    label:has(+ input[required])::after {
+      content: "*";
+      color: red;
+    }
+
+    /* 这里好像不太和谐, 要不我们必填*放到前面去 */
+    /* label:has(+input[required])::before {
+      content: "*";
+      color: red;
+    } */
+  </style>
+
+  <body>
+    <h1>A simple user account registration case</h1>
+
+    <form id="register-form">
+      <label for="email">
+        <!-- 前面也需要一个icon, 如增加一个Email的icon -->
+        <!-- <i>EmailIcon</i> -->
+        <svg
+          t="1716699571946"
+          class="icon"
+          viewBox="0 0 1024 1024"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          p-id="1493"
+          width="18"
+          height="18"
+        >
+          <path
+            d="M848.76288 333.62432H164.99712C99.32288 333.62432 46.08 386.87232 46.08 452.54144v297.28768c0 65.67424 53.24288 118.92224 118.91712 118.92224h683.77088c65.66912 0 118.91712-53.24288 118.91712-118.92224V452.54144c-0.00512-65.66912-53.248-118.91712-118.92224-118.91712z"
+            fill="#96383D"
+            p-id="1494"
+          ></path>
+          <path
+            d="M639.8208 51.2h-474.8288a44.58496 44.58496 0 0 0-44.59008 44.59008v609.44896a44.57984 44.57984 0 0 0 44.59008 44.59008h683.776a44.58496 44.58496 0 0 0 44.59008-44.59008V304.73728L639.8208 51.2z"
+            fill="#EBE2CE"
+            p-id="1495"
+          ></path>
+          <path
+            d="M551.4752 229.57568H209.59232v44.59008h341.88288v-44.59008zM209.59232 794.42432h594.58048v-44.5952H209.59232v44.5952z m0-89.18528h594.58048v-44.5952H209.59232v44.5952z m0-178.37568h594.58048v-44.5952H209.59232v44.5952z m0 89.18528h594.58048v-44.59008H209.59232v44.59008z m0-222.96576v44.59008h594.58048v-44.59008H209.59232z"
+            fill="#C9C1B1"
+            p-id="1496"
+          ></path>
+          <path
+            d="M941.83936 393.31328L75.60704 955.02848c12.89216 10.93632 29.29664 17.77152 47.44192 17.77152H893.5936c40.91904 0 74.09152-33.4592 74.09152-74.74688V449.60768c-0.00512-22.58432-10.14784-42.58816-25.84576-56.2944z"
+            fill="#D54D54"
+            p-id="1497"
+          ></path>
+          <path
+            d="M71.99232 396.5696C56.25344 410.18368 46.08 430.08512 46.08 452.54144v445.93152C46.08 939.53024 79.34976 972.8 120.40192 972.8h772.95104c18.20672 0 34.65216-6.79424 47.56992-17.664L71.99232 396.5696z"
+            fill="#EA5455"
+            p-id="1498"
+          ></path>
+          <path
+            d="M655.52384 66.90816v236.8l237.82912 74.89024V304.73728z"
+            fill=""
+            p-id="1499"
+          ></path>
+          <path
+            d="M640.66048 52.0448v207.2576a44.58496 44.58496 0 0 0 44.5952 44.5952h207.2576l-251.8528-251.8528z"
+            fill="#FFFBF2"
+            p-id="1500"
+          ></path>
+        </svg>
+        <strong>Email:</strong>
+        <!-- 还需要有一个提示的icon。条件: 移入移出的时候显示隐藏 -->
+        <i>icon</i>
+      </label>
+      <input name="email" type="email" id="email" required placeholder="<your>@163.com" />
+      <p class="heler-message">Please Provide your company email (@163.com)</p>
+      <p class="invalid">Must be a valid email</p>
+
+      <!-- 提交按钮 -->
+      <button type="submit">Register</button>
+      <button type="reset">Cancel</button>
+    </form>
+  </body>
+
+  <script>
+    const email = document.getElementById("email");
+    // const helperMessage = document.querySelector('.helper-message');
+    const invalid = document.querySelector(".invalid");
+
+    start();
+
+    function start() {
+      changeEmailInvalidVisible(false);
+      onEmailChanged();
+      onEmailFocus();
+      onInvalidEmail();
+    }
+
+    /**
+     * Change the visibility of the invalid message
+     * @param {boolean} shouldBeVisible {true} to show the invalid message, {false} to hide it
+     */
+    function changeEmailInvalidVisible(shouldBeVisible = false) {
+      invalid.style.display = shouldBeVisible ? "block" : "none";
+    }
+
+    function onEmailChanged(event) {
+      email.addEventListener("input", function (event) {
+        if (email.validity.typeMismatch) {
+          changeEmailInvalidVisible(true);
+          email.classList.contains("invalid-input") ||
+            email.classList.add("invalid-input");
+          return;
+        }
+
+        // if (email.validity.typeMismatch && !validate163Email(event.target.value)) {
+        //   changeEmailInvalidVisible(true);
+        //   email.classList.contains("invalid-input") ||
+        //     email.classList.add("invalid-input");
+        //   return;
+        // }
+
+        changeEmailInvalidVisible(false);
+        email.classList.contains("invalid-input") &&
+          email.classList.remove("invalid-input");
+      });
+
+      // 失去焦点的时候再次验证
+      //   email.addEventListener("blur", function (event) {
+      //     if (email.validity.typeMismatch) {
+      //       changeEmailInvalidVisible(true);
+      //     } else {
+      //       changeEmailInvalidVisible(false);
+      //     }
+      //   });
+    }
+
+    function onInvalidEmail() {
+      email.addEventListener("invalid", function (event) {
+        // 去除浏览器默认的提示
+        event.preventDefault();
+
+        // 使用自定义的提示
+        changeEmailInvalidVisible(true);
+
+        // 高亮错误的输入框
+        email.classList.contains("invalid-input") ||
+          email.classList.add("invalid-input");
+      });
+    }
+
+    function onEmailFocus() {
+      email.addEventListener("focus", function () {
+        changeEmailInvalidVisible(false);
+        email.classList.contains("invalid-input") &&
+          email.classList.remove("invalid-input");
+      });
+    }
+
+    /**
+     * 邮箱验证
+     */
+    // function validateEmail(email) {
+    //   // 通过正则表达式来验证
+    //   const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    //   return emailPattern.test(email);
+    // }
+
+    /**
+     * 163邮箱验证
+     */
+    function validate163Email(email) {
+      // 通过正则表达式来验证
+      const emailPattern = /^[a-zA-Z0-9._%+-]+@163\.com$/;
+      return emailPattern.test(email);
+    }
+
+    const form = document.getElementById("register-form");
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const formData = new FormData(form);
+      const email = formData.get("email");
+
+      console.log("Your email is: ", email);
+    });
+
+    form.addEventListener("reset", function (event) {
+      event.target.reset();
+      email.classList.contains("invalid-input") &&
+        email.classList.remove("invalid-input");
+      changeEmailInvalidVisible(false);
+    });
+  </script>
+</html>
